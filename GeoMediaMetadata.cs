@@ -13,11 +13,11 @@ namespace Lexor.GeoMedia
 {
     public class GeoMediaMetadata
     {
-        private GeoMediaSettings settings;
+        private GeoMediaSettings Settings { get; }
 
         public GeoMediaMetadata(IOptions<GeoMediaSettings> settings)
         {
-            this.settings = settings.Value;
+            Settings = settings.Value;
         }
 
         public async Task UpdateAsync(SqlServerSpatialDbContext context)
@@ -26,8 +26,8 @@ namespace Lexor.GeoMedia
 
             const int GeometryColumnType = 32;
 
-            var CoordinateSystemSubquery = $"(select csguid from GCoordSystem where name = '{settings.CoordinateSystemName}')";
-            var SpatialReferenceId = settings.SpatialReferenceId;
+            var CoordinateSystemSubquery = $"(select csguid from GCoordSystem where name = '{Settings.CoordinateSystemName}')";
+            var SpatialReferenceId = Settings.SpatialReferenceId;
 
             var sql = new StringBuilder();
             var entities = SqlServerSpatialColumn.GetSpatialColumns(context.Model);
@@ -142,7 +142,7 @@ INSERT [dbo].[GCoordSystem] (
     [ExtendProjMatrix8], [ExtendProjMatrix9], [ExtendProjMatrix10], [ExtendProjMatrix11], [ExtendProjMatrix12], [ExtendProjMatrix13], 
     [ExtendProjMatrix14], [ExtendProjMatrix15], [ExtendProjMatrix16], [VerticalDatum], [UndulationModel], [AverageUndulation], [NamedGeodeticDatum]) 
 VALUES (
-    N'{coordSystemGuid}', 2, N'{settings.CoordinateSystemName}', N'Default', 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, NULL, 10, 1, 
+    N'{coordSystemGuid}', 2, N'{Settings.CoordinateSystemName}', N'Default', 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, NULL, 10, 1, 
     6378137, 298.2572221010002, 8, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
