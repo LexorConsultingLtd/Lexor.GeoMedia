@@ -26,8 +26,8 @@ namespace Lexor.GeoMedia
 
             const int GeometryColumnType = 32;
 
-            var CoordinateSystemSubquery = $"(select csguid from GCoordSystem where name = '{Settings.CoordinateSystemName}')";
-            var SpatialReferenceId = Settings.SpatialReferenceId;
+            var coordinateSystemSubquery = $"(select csguid from GCoordSystem where name = '{Settings.CoordinateSystemName}')";
+            var spatialReferenceId = Settings.SpatialReferenceId;
 
             var sql = new StringBuilder();
             var entities = SqlServerSpatialColumn.GetSpatialColumns(context.Model);
@@ -44,7 +44,7 @@ namespace Lexor.GeoMedia
                 // Insert metadata
                 var geoMediaSpatialColumnName = GetGeoMediaSpatialColumnName(columnName);
                 sql.AppendLine($"insert into GFeatures values ('{tableName}', {geometryTypeValue}, '{geoMediaSpatialColumnName}', '')");
-                sql.AppendLine($"insert into GFieldMapping values('{tableName}', '{geoMediaSpatialColumnName}', {GeometryColumnType}, {geometryTypeValue}, {CoordinateSystemSubquery}, null, '{columnName}', {SpatialReferenceId})");
+                sql.AppendLine($"insert into GFieldMapping values('{tableName}', '{geoMediaSpatialColumnName}', {GeometryColumnType}, {geometryTypeValue}, {coordinateSystemSubquery}, null, '{columnName}', {spatialReferenceId})");
 
                 sql.AppendLine();
             }
@@ -95,8 +95,8 @@ namespace Lexor.GeoMedia
             }
 
             // Create metadata objects starting with the GeoMedia metadata script (created by SSMS)
-            var type = this.GetType();
-            string ddl = await Resources.ReadResourceAsync($"{type.Namespace}.Resources.MetadataDDL.sql", type.Assembly);
+            var type = GetType();
+            var ddl = await Resources.ReadResourceAsync($"{type.Namespace}.Resources.MetadataDDL.sql", type.Assembly);
             var cmds = ddl
                 .Split(new[] { "GO\r\n", "GO\n" }, StringSplitOptions.None)
                 .Where(cmd => !cmd.StartsWith("USE ") && !string.IsNullOrWhiteSpace(cmd))
