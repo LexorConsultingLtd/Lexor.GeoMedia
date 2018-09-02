@@ -24,7 +24,7 @@ namespace Lexor.GeoMedia
         {
             await EnsureMetadataTablesCreated(context);
 
-            const int GeometryColumnType = 32;
+            const int geometryColumnType = 32;
 
             var coordinateSystemSubquery = $"(select csguid from GCoordSystem where name = '{Settings.CoordinateSystemName}')";
             var spatialReferenceId = Settings.SpatialReferenceId;
@@ -44,7 +44,7 @@ namespace Lexor.GeoMedia
                 // Insert metadata
                 var geoMediaSpatialColumnName = GetGeoMediaSpatialColumnName(columnName);
                 sql.AppendLine($"insert into GFeatures values ('{tableName}', {geometryTypeValue}, '{geoMediaSpatialColumnName}', '')");
-                sql.AppendLine($"insert into GFieldMapping values('{tableName}', '{geoMediaSpatialColumnName}', {GeometryColumnType}, {geometryTypeValue}, {coordinateSystemSubquery}, null, '{columnName}', {spatialReferenceId})");
+                sql.AppendLine($"insert into GFieldMapping values('{tableName}', '{geoMediaSpatialColumnName}', {geometryColumnType}, {geometryTypeValue}, {coordinateSystemSubquery}, null, '{columnName}', {spatialReferenceId})");
 
                 sql.AppendLine();
             }

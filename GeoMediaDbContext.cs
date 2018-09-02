@@ -16,7 +16,7 @@ namespace Lexor.GeoMedia
         {
             base.PerformAdditionalSpatialColumnProcessing(modelBuilder, entityType, property, metadata);
 
-            // Add requried GeoMedia version of geometry as a shadow field. This will be stored in the database but invisible to the model.
+            // Add required GeoMedia version of geometry as a shadow field. This will be stored in the database but invisible to the model.
             // This will be the "primary" geometry field, and the previous field will be the "native" geometry field.
             modelBuilder
                 .Entity(entityType.Name)
